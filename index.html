@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Name - Portfolio</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <pre id="donut"></pre>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <a href="#home">Portfolio</a>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#experience" class="nav-link">Experience</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#projects" class="nav-link">Projects</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#skills" class="nav-link">Skills</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
+            <div class="hamburger">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Hi, I'm Atharv Bhalerao
+                </h1>
+                <p class="hero-subtitle">> Physics Student & Aspiring Embedded Systems Developer</p>
+                <p class="hero-description">
+                    // Director at XOR Technology Inc, leading SDK development for low-power microcontrollers<br>
+                    // Passionate about embedded systems, machine learning, and computational physics
+                </p>
+                <div class="hero-buttons">
+                    <a href="#projects" class="btn btn-primary">View My Work</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <div class="profile-card">
+                    <img src="portfolioimage.jpeg" alt="Profile Photo" class="profile-avatar-img" onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Atharv+Bhalerao&background=161b22&color=58a6ff&size=256';" />
+                </div>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <a href="#about">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>
+                        I'm a Physics student at the University of British Columbia with extensive coursework in Computer Science, 
+                        including Data Structures, Algorithms, Software Engineering, and Machine Learning. I'm passionate about 
+                        embedded systems and computational physics, with a strong foundation in C/C++ programming.
+                    </p>
+                    <p>
+                        Currently serving as Director at XOR Technology Inc, I lead SDK development for low-power microcontrollers 
+                        and design lightweight BNN layers in C for embedded deployment. I'm also a Teaching Assistant for 
+                        first-year physics courses and an active member of the PARSEC Electronics Team.
+                    </p>
+                    <div class="about-stats">
+                        <div class="stat">
+                            <h3>UBC</h3>
+                            <p>Physics Student</p>
+                        </div>
+                        <div class="stat">
+                            <h3>XOR Tech</h3>
+                            <p>Director</p>
+                        </div>
+                        <div class="stat">
+                            <h3>PARSEC</h3>
+                            <p>Electronics Team</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <div class="about-card">
+                        <i class="fas fa-code"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="experience">
+        <div class="container">
+            <h2 class="section-title">Experience</h2>
+            <div class="experience-content">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <h3>Director</h3>
+                        <span class="company">XOR Technology Inc</span>
+                        <span class="duration">March 2025 - Present</span>
+                    </div>
+                    <p>Leading SDK development for low-power microcontrollers and designing lightweight BNN layers in C for embedded deployment.</p>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <h3>Teaching Assistant</h3>
+                        <span class="company">UBC Physics Department</span>
+                        <span class="duration">October 2024 - April 2024</span>
+                    </div>
+                    <p>Teaching Assistant for first-year physics courses on Electricity and Magnetism and Wave Dynamics.</p>
+                </div>
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <h3>Electronics Team Member</h3>
+                        <span class="company">PARSEC, UBC</span>
+                        <span class="duration">November 2024 - June 2025</span>
+                    </div>
+                    <p>One of the early members of Pacific Rim Space Exploration Corporation. Working on building electronics and embedded software for the LunaPure project.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="projects">
+        <div class="container">
+            <h2 class="section-title">My Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>Neural Network Framework in C</h3>
+                        <p>A complete neural network framework implemented in C for embedded systems and low-power applications.</p>
+                        <div class="project-tech">
+                            <span>C</span>
+                            <span>Neural Networks</span>
+                            <span>Embedded Systems</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                            <a href="#" class="project-link">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-route"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>A* Implementation in C++</h3>
+                        <p>Efficient A* pathfinding algorithm implementation in C++ for optimal route planning and navigation systems.</p>
+                        <div class="project-tech">
+                            <span>C++</span>
+                            <span>Algorithms</span>
+                            <span>Data Structures</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                            <a href="#" class="project-link">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-image">
+                        <i class="fas fa-eye"></i>
+                    </div>
+                    <div class="project-content">
+                        <h3>PyTorch Image Classification & AudioMNIST</h3>
+                        <p>Self-learning projects implementing image classification networks and AudioMNIST networks using PyTorch for deep learning applications.</p>
+                        <div class="project-tech">
+                            <span>Python</span>
+                            <span>PyTorch</span>
+                            <span>Deep Learning</span>
+                        </div>
+                        <div class="project-links">
+                            <a href="#" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                            <a href="#" class="project-link">
+                                <i class="fab fa-github"></i> Code
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Skills & Technologies</h2>
+            <div class="skills-content">
+                <div class="skills-category">
+                    <h3>Programming Languages</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <i class="fab fa-python"></i>
+                            <span>Python</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-code"></i>
+                            <span>C++</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-microchip"></i>
+                            <span>C</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fab fa-java"></i>
+                            <span>Java</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-robot"></i>
+                            <span>MicroPython</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-category">
+                    <h3>Machine Learning & AI</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <i class="fas fa-brain"></i>
+                            <span>PyTorch</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-network-wired"></i>
+                            <span>Neural Networks</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-chart-line"></i>
+                            <span>Machine Learning</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-robot"></i>
+                            <span>Deep Learning</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-cogs"></i>
+                            <span>Data Analysis</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-category">
+                    <h3>Electronics & Hardware</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <i class="fas fa-microchip"></i>
+                            <span>Embedded C</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-cog"></i>
+                            <span>LTSPICE</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-print"></i>
+                            <span>3D Printing</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-drafting-compass"></i>
+                            <span>Fusion 360</span>
+                        </div>
+                        <div class="skill-item">
+                            <i class="fas fa-microchip"></i>
+                            <span>Electronics Design</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Section -->
+    <section id="resume" class="resume">
+        <div class="container">
+            <h2 class="section-title">Resume</h2>
+            <div class="resume-content">
+                <div class="resume-card">
+                    <div class="resume-icon">
+                        <i class="fas fa-file-pdf"></i>
+                    </div>
+                    <div class="resume-info">
+                        <h3>Atharv Bhalerao Resume</h3>
+                        <p>Click the button below to view my complete resume.</p>
+                        <button class="btn btn-primary" id="show-resume-btn" type="button">
+                            <i class="fas fa-eye"></i> View Resume
+                        </button>
+                        <div class="resume-pdf-viewer" id="resume-pdf-viewer" style="display:none; margin-top:2rem;">
+                            <iframe src="Atharv Bhalerao Resume (3).pdf" width="100%" height="600px" style="border:1px solid #30363d; border-radius:6px; background:#161b22;" title="Resume PDF"></iframe>
+                            <p style="margin-top:1rem; color:#8b949e; font-size:0.9rem;">If the PDF does not display, <a href="Atharv Bhalerao Resume (3).pdf" target="_blank" style="color:#58a6ff;">click here to view it in a new tab</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Let's work together</h3>
+                    <p>
+                        I'm always interested in new opportunities in embedded systems, machine learning, 
+                        and computational physics. Whether you have a research collaboration or project idea, 
+                        feel free to reach out!
+                    </p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>atharv.sachin.bhalerao@gmail.com</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-university"></i>
+                            <span>University of British Columbia</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>Vancouver, BC, Canada</span>
+                        </div>
+                    </div>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fas fa-university"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fas fa-microchip"></i>
+                        </a>
+                    </div>
+                </div>
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Your Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Subject" required>
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Atharv Bhalerao. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var btn = document.getElementById('show-resume-btn');
+            var viewer = document.getElementById('resume-pdf-viewer');
+            if(btn && viewer) {
+                btn.addEventListener('click', function() {
+                    viewer.style.display = viewer.style.display === 'none' ? 'block' : 'none';
+                    btn.style.display = 'none';
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
