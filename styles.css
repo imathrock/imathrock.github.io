@@ -244,6 +244,7 @@ body {
     justify-content: center;
     position: relative;
     overflow: hidden;
+    padding: 10px;
 }
 
 .profile-card::before {
@@ -255,6 +256,7 @@ body {
     bottom: 0;
     background: #0d1117;
     border-radius: 6px;
+    z-index: 0;
 }
 
 .profile-avatar {
@@ -271,6 +273,10 @@ body {
     border: 3px solid #30363d;
     box-shadow: 0 4px 24px rgba(0,0,0,0.3);
     background: #161b22;
+    position: relative;
+    z-index: 1;
+    max-width: 230px;
+    max-height: 230px;
 }
 
 .scroll-indicator {
