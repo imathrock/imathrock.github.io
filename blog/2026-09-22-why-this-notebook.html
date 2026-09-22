@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why this notebook &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+
+<!-- KaTeX: renders $...$ and $$...$$ in the page body. Loaded from a
+     CDN, no build step. Delete this block on pages that have no math. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="index.html" aria-current="page">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+
+  <p><a href="index.html">&larr; back to blog</a></p>
+
+  <h1>Why this notebook</h1>
+  <p class="byline">2026-09-22 &middot; <span class="tag-list"><span class="tag">meta</span></span></p>
+
+  <p>
+    Most of what I actually know, I picked up outside a syllabus: reading a
+    paper because a project demanded it, rewriting something after the first
+    version was wrong, or staring at a datasheet until a peripheral finally
+    did what it was supposed to. None of that leaves a trace anywhere except
+    in whatever code or notes I happened to keep. This is where I start
+    keeping them on purpose.
+  </p>
+
+  <p>
+    So the plan for this blog is narrow: write up the self-taught detours as
+    they happen &mdash; the physics, the embedded systems, the machine
+    learning &mdash; in enough detail that I (or anyone else) could pick the
+    thread back up later. Not polished tutorials, just working notes.
+  </p>
+
+  <h2>Why plain HTML</h2>
+  <p>
+    The rest of this site is hand-written HTML and one stylesheet, no
+    framework, no build step, no backend. That is a deliberate constraint,
+    not an oversight. A new post is a new file; editing the site means
+    editing text. The one concession to 2026 is that equations need to look
+    like equations, which plain HTML does not do on its own &mdash; so pages
+    that need math load <a href="https://katex.org/">KaTeX</a> from a CDN
+    and nothing else.
+  </p>
+
+  <h2>A small worked example</h2>
+  <p>
+    As a test of the machinery: the layers in a binary neural network
+    replace full-precision weights <span>$w \in \mathbb{R}$</span> with a
+    single sign bit, using something close to
+  </p>
+
+  <p>
+    $$
+    w_b = \operatorname{sign}(w) =
+    \begin{cases}
+      +1 & w \geq 0 \\
+      -1 & w < 0
+    \end{cases}
+    $$
+  </p>
+
+  <p>
+    which turns a multiply-accumulate over <span>$n$</span> weights into a
+    handful of XNOR and popcount operations &mdash; the entire reason a BNN
+    layer can run on a microcontroller that would choke on a full
+    floating-point network. A minimal version of the packed dot product
+    looks like this in C:
+  </p>
+
+  <pre><code>// dot product of two {-1,+1} vectors packed as bits,
+// via XNOR + popcount instead of n multiplies and adds
+int32_t bnn_dot(uint32_t a, uint32_t b, int n) {
+    uint32_t agree = ~(a ^ b);           // 1 where bits match
+    int ones = __builtin_popcount(agree & ((1u << n) - 1));
+    return 2 * ones - n;                 // map {0..n} bit-count back to {-n..n}
+}</code></pre>
+
+  <p>
+    If both the display equation above and the code block rendered the way
+    you'd expect, the notebook works. Everything after this post is content,
+    not plumbing.
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    if (window.renderMathInElement) {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ]
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

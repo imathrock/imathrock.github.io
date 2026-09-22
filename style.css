@@ -1,0 +1,266 @@
+/* ---------------------------------------------------------------
+   style.css -- shared stylesheet for the whole site.
+   One file, no preprocessor, no build step. Kept intentionally
+   plain: this is meant to read like a document, not an app.
+   ------------------------------------------------------------- */
+
+:root {
+  --bg:        #17150f;
+  --ink:       #e9e4d4;
+  --ink-soft:  #9c9686;
+  --rule:      #55503c;
+  --rule-soft: #322f26;
+  --link:      #8ec1e0;
+  --link-visited: #b9a0d9;
+  --code-bg:   #201e17;
+  --measure:   42em;
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", Times, serif;
+  font-size: 17px;
+  line-height: 1.6;
+}
+
+/* ---------------------------- layout ---------------------------- */
+
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+header.site-header {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 2.25rem 1.25rem 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.site-title {
+  margin: 0;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+}
+
+.site-title a {
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.site-tagline {
+  margin: 0.15rem 0 1rem;
+  font-style: italic;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+}
+
+nav.site-nav {
+  font-size: 0.95rem;
+}
+
+nav.site-nav a {
+  color: var(--link);
+  margin-right: 0;
+}
+
+nav.site-nav .sep {
+  color: var(--rule);
+  margin: 0 0.6em;
+}
+
+nav.site-nav a[aria-current="page"] {
+  color: var(--ink);
+  font-weight: bold;
+  text-decoration: none;
+}
+
+footer.site-footer {
+  max-width: var(--measure);
+  margin: 3rem auto 0;
+  padding: 1rem 1.25rem 2.5rem;
+  border-top: 1px solid var(--rule);
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+/* --------------------------- typography -------------------------- */
+
+h1, h2, h3, h4 {
+  font-weight: bold;
+  line-height: 1.25;
+  color: var(--ink);
+}
+
+h1 { font-size: 1.7rem; margin: 0 0 1rem; }
+h2 {
+  font-size: 1.3rem;
+  margin: 2.25rem 0 0.9rem;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid var(--rule-soft);
+}
+h3 { font-size: 1.08rem; margin: 1.5rem 0 0.4rem; }
+
+p { margin: 0 0 1rem; }
+
+a { color: var(--link); }
+a:visited { color: var(--link-visited); }
+a { text-decoration-thickness: 1px; }
+
+hr {
+  border: none;
+  border-top: 1px solid var(--rule-soft);
+  margin: 2rem 0;
+}
+
+blockquote {
+  margin: 1rem 0;
+  padding: 0.2rem 1rem;
+  border-left: 3px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+small, .fine-print { color: var(--ink-soft); font-size: 0.85rem; }
+
+ul, ol { padding-left: 1.4rem; }
+li { margin-bottom: 0.35rem; }
+
+/* ----------------------------- tables ----------------------------- */
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.95rem;
+}
+
+caption {
+  text-align: left;
+  font-style: italic;
+  color: var(--ink-soft);
+  margin-bottom: 0.4rem;
+}
+
+th, td {
+  text-align: left;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--rule-soft);
+  vertical-align: top;
+}
+
+th {
+  background: var(--code-bg);
+  font-weight: bold;
+}
+
+/* ------------------------------ code ------------------------------ */
+
+code, pre, kbd {
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 0.88em;
+}
+
+code {
+  background: var(--code-bg);
+  padding: 0.1em 0.35em;
+  border: 1px solid var(--rule-soft);
+}
+
+pre {
+  background: var(--code-bg);
+  border: 1px solid var(--rule-soft);
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  line-height: 1.45;
+}
+
+pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* --------------------------- misc widgets --------------------------- */
+
+.entry-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.entry-list li {
+  margin-bottom: 1.4rem;
+}
+
+.entry-date {
+  display: inline-block;
+  min-width: 6.5em;
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.entry-title a {
+  font-weight: bold;
+}
+
+.entry-excerpt {
+  margin: 0.25rem 0 0;
+  color: var(--ink-soft);
+}
+
+.tag-list {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.tag-list .tag::before { content: "#"; }
+.tag-list .tag { margin-right: 0.5em; }
+
+.two-col {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.two-col .portrait {
+  flex: 0 0 140px;
+}
+
+.two-col .portrait img {
+  width: 140px;
+  height: auto;
+  border: 1px solid var(--rule);
+  filter: grayscale(15%);
+}
+
+.two-col .bio { flex: 1 1 22em; min-width: 0; }
+
+.byline {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin: -0.5rem 0 1.5rem;
+}
+
+.callout {
+  background: var(--code-bg);
+  border: 1px solid var(--rule-soft);
+  padding: 0.9rem 1.1rem;
+  margin: 1.25rem 0;
+  font-size: 0.95rem;
+}
+
+/* KaTeX display blocks get a little breathing room */
+.katex-display { margin: 1.2em 0; overflow-x: auto; overflow-y: hidden; }
+
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .two-col { flex-direction: column; }
+  .two-col .portrait { flex: none; }
+}

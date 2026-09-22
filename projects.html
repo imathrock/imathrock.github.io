@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Projects &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="index.html">Home</a><span class="sep">|</span><a href="experience.html">Experience</a><span class="sep">|</span><a href="projects.html" aria-current="page">Projects</a><span class="sep">|</span><a href="blog/index.html">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+  <h1>Projects</h1>
+  <p>Mostly C, mostly things that touch either hardware or a training loop. Source for everything is on <a href="https://github.com/imathrock">GitHub</a>.</p>
+
+  <h3>Framework for CNNs in C</h3>
+  <p class="tag-list"><span class="tag">c</span><span class="tag">neural-networks</span><span class="tag">simd</span></p>
+  <p>
+    A framework for building convolutional neural networks from scratch in C,
+    with numpy-style SIMD vectorization. Reaches roughly 96% accuracy on
+    MNIST and 90% on Fashion-MNIST with no dependencies beyond the standard
+    library and a vector intrinsics header.
+  </p>
+  <p><a href="https://github.com/imathrock/CNNs-in-C">github.com/imathrock/CNNs-in-C</a></p>
+
+  <h3>Gesture Control RC Car</h3>
+  <p class="tag-list"><span class="tag">c</span><span class="tag">embedded</span><span class="tag">i2c</span><span class="tag">rf</span></p>
+  <p>
+    Capstone project for UBC PHYS 319. A gesture-controlled RC car built
+    around a custom I2C driver for an MPU6050 accelerometer/gyroscope, with
+    an NRF24 link carrying gesture data to the car in real time.
+  </p>
+  <p><a href="https://github.com/imathrock/Gesture_Control_RC">github.com/imathrock/Gesture_Control_RC</a></p>
+
+  <h3>LC-3 Virtual Machine</h3>
+  <p class="tag-list"><span class="tag">c</span><span class="tag">systems</span><span class="tag">virtual-machine</span></p>
+  <p>
+    A from-scratch virtual machine for the Little Computer 3 (LC-3)
+    instruction set: 10 registers, the full 16-bit instruction set, memory
+    mapping, and I/O handling, with example programs (Hello World, 2048)
+    running on top of it. An LC-3 assembler is in progress.
+  </p>
+  <p><a href="https://github.com/imathrock/LC3-VM">github.com/imathrock/LC3-VM</a></p>
+
+  <h3>FPGA Emulator <small>(incomplete)</small></h3>
+  <p class="tag-list"><span class="tag">c</span><span class="tag">fpga</span><span class="tag">digital-logic</span></p>
+  <p>
+    A software emulator for configurable logic blocks, built to understand
+    FPGA internals from the logic-cell level up, using Logisim for circuit
+    design with an eye toward eventual Verilog-to-circuit translation.
+  </p>
+  <p><a href="https://github.com/imathrock/FPGA-emulator">github.com/imathrock/FPGA-emulator</a></p>
+
+  <h3>PyTorch exercises</h3>
+  <p class="tag-list"><span class="tag">python</span><span class="tag">pytorch</span><span class="tag">computer-vision</span></p>
+  <p>
+    A collection of smaller PyTorch projects &mdash; rice-grain
+    classification, animal image classification, training GoogLeNet from
+    scratch &mdash; used to build up fluency with the framework and with
+    training loops in general.
+  </p>
+  <p><a href="https://github.com/imathrock/simple-PyTorch-Projects">github.com/imathrock/simple-PyTorch-Projects</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+</body>
+</html>
