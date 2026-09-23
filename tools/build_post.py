@@ -18,8 +18,10 @@ Markdown source format (posts/*.md):
     Body in Markdown. Supports: # and ## and ### headers (mapped to
     h1/h2/h3, though the post title itself becomes the page's h1 so
     start the body at ##), paragraphs, **bold**, *italic*, `inline code`,
-    [links](url), fenced code blocks (```lang ... ```), and LaTeX math
-    left untouched for KaTeX: $inline$ and $$display$$.
+    [links](url), fenced code blocks (```lang ... ```), images on their
+    own line (![alt](src) or ![alt](src "caption")), rendered as a
+    <figure> with optional <figcaption>, and LaTeX math left untouched
+    for KaTeX: $inline$ and $$display$$.
 
 Re-running on the same .md file overwrites the generated .html and
 updates (rather than duplicates) its entry in blog/index.html.
@@ -76,6 +78,10 @@ def render_inline(text):
 
     text = html.escape(text, quote=False)
 
+    # inline images ![alt](src) (block-level standalone images are handled
+    # separately in render_body before this function ever sees the line)
+    text = re.sub(r'!\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)',
+                   lambda m: f'<img src="{m.group(2)}" alt="{m.group(1)}">', text)
     # links [text](url)
     text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)",
                    lambda m: f'<a href="{m.group(2)}">{m.group(1)}</a>', text)
@@ -130,6 +136,18 @@ def render_body(body):
                 i += 1
             i += 1
             out.append("  <p>\n    $$\n" + "\n".join(math_lines) + "\n    $$\n  </p>\n")
+            continue
+
+        # standalone image on its own line -> <figure> with optional caption
+        img = re.match(r'^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)\s*$', line)
+        if img:
+            flush_para()
+            alt, src, caption = img.group(1), img.group(2), img.group(3)
+            out.append(f'  <figure>\n    <img src="{src}" alt="{html.escape(alt, quote=False)}">\n')
+            if caption:
+                out.append(f'    <figcaption>{render_inline(caption)}</figcaption>\n')
+            out.append("  </figure>\n")
+            i += 1
             continue
 
         # headers

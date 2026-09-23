@@ -242,6 +242,29 @@ pre code {
 
 .two-col .bio { flex: 1 1 22em; min-width: 0; }
 
+.page figure {
+  margin: 1.5rem 0;
+}
+
+.page figure img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--rule);
+}
+
+.page figcaption {
+  margin-top: 0.5rem;
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+}
+
+.page p img {
+  max-width: 100%;
+  height: auto;
+  vertical-align: middle;
+}
+
 .byline {
   color: var(--ink-soft);
   font-size: 0.9rem;
