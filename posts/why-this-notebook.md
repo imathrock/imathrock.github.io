@@ -10,7 +10,7 @@ One of my favorite people on the internet is Joe Barnard, more commonly known as
 
 ## Rabbit Holes and Autodidictism
 A rabbit hole defines itself as a problem or a piece of information that keeps getting ever increasingly complex and interesting the more you dig into it. This xkcd comic is an apt summary:
-![alt text](image.png)
+![xkcd comic on rabbit holes](image.png)
 Watching that bps space video made me realize how little I know about the world and how much more there is to learn. There are so many different types of rabbit holes that one could never even concieve can exist. I'll illustrate what I mean with an example. Let's pick a topic, say light. If we begin learning about light, what we stop at is that light is a wave, different wavelengths means we can see different colours. Now let's open the pandora's box and look a little deeper, here's a list of theories that are used to explain how light works:
 - Ray Optics
 - Gaussian Optics

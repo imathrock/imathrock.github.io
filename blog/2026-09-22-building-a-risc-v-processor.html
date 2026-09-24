@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building a RISC V processor &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+
+<!-- KaTeX: renders $...$ and $$...$$ in the page body. Loaded from a
+     CDN, no build step. Delete this block on pages that have no math. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="index.html" aria-current="page">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+
+  <p><a href="index.html">&larr; back to blog</a></p>
+
+  <h1>Building a RISC V processor</h1>
+  <p class="byline">2026-09-22 &middot; <span class="tag-list"><span class="tag">RISC V</span></span></p>
+  <p class="project-line">Part of project: <a href="projects/risc-v-processor.html">RISC-V Processor</a></p>
+
+  <h2>Motivation</h2>
+
+  <p>
+    When I was trying to create a CNN framework in C, I realized that it's all matrix multiplication
+  </p>
+
+  <figure>
+    <img src="rv32blg1meme.png" alt="alt text">
+
+  </figure>
+
+  <p>
+    And it is possible to hyper optimize these operations by simply having the weights loaded into a memory matrix and have the vectors flow thru them to get an instant output. (I know the actual industry design is way more complicated and precise). Simultaneously I was taking a Computer Architecture and operating systems class and here we created a pipelined y86 processor on paper and we learned assembly thru simulators. I've always found that to be really cool, so I dug in as much as I could, I looked into SIMD, I accelerated my single threaded CNN framework as fast as I could get it, I learnt about cache optimizations, eviction policies and a whole bunch more. I also created a LC3 emulator and an assembler for that emulator that compiled assmebly into bytecodes that the LC3 virtual machine could run.
+  </p>
+
+  <p>
+    Suffice to say I love low level stuff so the natural next step is to build my own CPU. So I'm going to create the project's scope here. I have a De1 SOC FPGA board and I'm gonna try and create first a sequential RV32I CPU and then a pipelined one. Also somehow figure out how to optimize it for GEMM stuff.
+  </p>
+
+  <h2>Project Scope</h2>
+
+  <p>
+    Here we go, I want this project to be able to do the following:
+  </p>
+
+  <ul>
+
+    <li>Run the RV32I instruction set sequentially when programmed manually.</li>
+
+    <li>Pass the RV32I tests</li>
+
+    <li>Run custom programs using the toolchain provided.</li>
+
+    <li>Parallelize into 5 stages (because y86 is 5 stage), fetch, decode, execute, memory, writeback.</li>
+
+    <li>Pass the RV32I tests again.</li>
+
+    <li>Try to optimize it for GEMM by exploring vector registers.</li>
+
+  </ul>
+
+  <h2></h2>
+
+  <p>
+    To do this I need to write verilog. Verilog is a Hardware Description Language. From what I know the code that we write there describes the ciruit inside the FPGA. But what is inside an FPGA?
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    if (window.renderMathInElement) {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ]
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -13,7 +13,14 @@ Markdown source format (posts/*.md):
     date: 2026-09-22
     tags: meta, physics
     excerpt: One or two sentences shown on the blog index.
+    project: RISC-V Processor
     ---
+
+Optional `project` field groups this post under a project index page at
+blog/projects/<slugified-project>.html, listing every post that shares
+the same project name (newest first), and adds a "Part of project: ..."
+link under the post's byline. Reuse the exact same project string across
+posts to group them together.
 
     Body in Markdown. Supports: # and ## and ### headers (mapped to
     h1/h2/h3, though the post title itself becomes the page's h1 so
@@ -34,6 +41,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 BLOG_DIR = ROOT / "blog"
 INDEX_PATH = BLOG_DIR / "index.html"
+PROJECTS_DIR = BLOG_DIR / "projects"
 
 
 def parse_front_matter(text):
@@ -52,6 +60,7 @@ def parse_front_matter(text):
             sys.exit(f"error: front matter missing required field '{required}'")
     meta.setdefault("tags", "")
     meta.setdefault("excerpt", "")
+    meta.setdefault("project", "")
     return meta, body
 
 
@@ -150,6 +159,19 @@ def render_body(body):
             i += 1
             continue
 
+        # unordered list: consecutive lines starting with "- " or "* "
+        if re.match(r"^[-*]\s+", line):
+            flush_para()
+            items = []
+            while i < len(lines) and re.match(r"^[-*]\s+", lines[i]):
+                items.append(re.match(r"^[-*]\s+(.*)$", lines[i]).group(1).strip())
+                i += 1
+            out.append("  <ul>\n")
+            for item in items:
+                out.append(f"    <li>{render_inline(item)}</li>\n")
+            out.append("  </ul>\n")
+            continue
+
         # headers
         h = re.match(r"^(#{2,3})\s+(.*)$", line)
         if h:
@@ -201,7 +223,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
 
   <h1>{title}</h1>
   <p class="byline">{date} &middot; <span class="tag-list">{tag_spans}</span></p>
-
+{project_line}
 {body}
 </main>
 
@@ -235,10 +257,18 @@ def tag_list(tags_csv):
 def build_page(meta, body_html):
     tag_spans, _ = tag_list(meta["tags"])
     year = meta["date"].split("-")[0]
+    project_line = ""
+    if meta["project"]:
+        project_slug = slugify(meta["project"])
+        project_line = (
+            f'  <p class="project-line">Part of project: '
+            f'<a href="projects/{project_slug}.html">{html.escape(meta["project"], quote=False)}</a></p>\n'
+        )
     return PAGE_TEMPLATE.format(
         title=html.escape(meta["title"], quote=False),
         date=meta["date"],
         tag_spans=tag_spans,
+        project_line=project_line,
         body=body_html,
         year=year,
     )
@@ -253,6 +283,91 @@ ENTRY_TEMPLATE = """    <li>
       </p>
       <p class="tag-list">{tag_spans}</p>
     </li>"""
+
+
+PROJECT_INDEX_TEMPLATE = """<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{project} &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../../index.html">Home</a><span class="sep">|</span><a href="../../experience.html">Experience</a><span class="sep">|</span><a href="../../projects.html">Projects</a><span class="sep">|</span><a href="../index.html">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+
+  <p><a href="../index.html">&larr; back to blog</a></p>
+
+  <h1>{project}</h1>
+  <p>All posts about this project, newest first.</p>
+
+  <ul class="entry-list">
+{entries}
+  </ul>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; {year} Atharv Bhalerao.</p>
+</footer>
+
+</body>
+</html>
+"""
+
+
+def update_project_index(meta, filename):
+    project = meta["project"]
+    if not project:
+        return
+    project_slug = slugify(project)
+    PROJECTS_DIR.mkdir(parents=True, exist_ok=True)
+    project_path = PROJECTS_DIR / f"{project_slug}.html"
+
+    tag_spans, _ = tag_list(meta["tags"])
+    entry = ENTRY_TEMPLATE.format(
+        date=meta["date"],
+        filename=f"../{filename}",
+        title=html.escape(meta["title"], quote=False),
+        excerpt=html.escape(meta["excerpt"], quote=False),
+        tag_spans=tag_spans,
+    )
+
+    existing_entries = []
+    if project_path.exists():
+        page_html = project_path.read_text(encoding="utf-8")
+        entry_re = re.compile(
+            r'[ \t]*<li>\s*<span class="entry-date">.*?</li>\n?', re.S
+        )
+        for m in entry_re.finditer(page_html):
+            if f'href="../{filename}"' not in m.group(0):
+                existing_entries.append(m.group(0).rstrip("\n"))
+
+    all_entries = existing_entries + [entry]
+
+    def entry_date(e):
+        dm = re.search(r'entry-date">([\d-]+)<', e)
+        return dm.group(1) if dm else ""
+
+    all_entries.sort(key=entry_date, reverse=True)
+
+    latest_year = max(entry_date(e).split("-")[0] for e in all_entries)
+    page = PROJECT_INDEX_TEMPLATE.format(
+        project=html.escape(project, quote=False),
+        entries="\n".join(all_entries),
+        year=latest_year,
+    )
+    project_path.write_text(page, encoding="utf-8")
+    print(f"updated blog/projects/{project_slug}.html")
 
 
 def update_index(meta, filename):
@@ -310,6 +425,7 @@ def main():
     BLOG_DIR.mkdir(exist_ok=True)
     (BLOG_DIR / filename).write_text(page, encoding="utf-8")
     update_index(meta, filename)
+    update_project_index(meta, filename)
 
     print(f"wrote blog/{filename}")
     print(f"updated blog/index.html")

@@ -271,6 +271,12 @@ pre code {
   margin: -0.5rem 0 1.5rem;
 }
 
+.project-line {
+  color: var(--ink-soft);
+  font-size: 0.9rem;
+  margin: -1rem 0 1.5rem;
+}
+
 .callout {
   background: var(--code-bg);
   border: 1px solid var(--rule-soft);
