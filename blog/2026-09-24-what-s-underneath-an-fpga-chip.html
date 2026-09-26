@@ -65,8 +65,10 @@
     I myself don't see how this fits into the larger picture but this is the simplest form of a CLB I could find on the internet. What we see here is we have a D flip flop, A Multiplexer and a LUT (Lookup table). Let's start by creating these basic components inside logisim-evolution.
   </p>
 
+  <h4>Multiplexer</h4>
+
   <p>
-    #### Multiplexer This is kinda basic so I'm just gonna show circuits and not explain how they work. A 2 to 1 multiplexer acts as a selection tool. Depending on what the select pin is, the output either comes from one pin or the other. Here's an image of one I created
+    This is kinda basic so I'm just gonna show circuits and not explain how they work. A 2 to 1 multiplexer acts as a selection tool. Depending on what the select pin is, the output either comes from one pin or the other. Here's an image of one I created
   </p>
 
   <figure>
@@ -80,12 +82,20 @@
     It's possible to chain many of these together to then get $2^n$ size mux, It would have $n$ select pins.
   </p>
 
+  <h4>LUT</h4>
+
   <p>
-    #### LUT A LUT is a Lookup table. Think of it as a configurable truth table but it's a physical circuit. So how do you make a LUT? A LUT needs to have persistent memory because that is the programmable bit of our Configurable Logic Block. So it needs to have flip flops.
+    A LUT is a Lookup table. Think of it as a configurable truth table but it's a physical circuit. So how do you make a LUT? A LUT needs to have persistent memory because that is the programmable bit of our Configurable Logic Block. So it needs to have flip flops.
   </p>
 
   <p>
-    Let's make a flip flop! ##### Flip Flops We're really getting in the weeds here. To make a flip flop we need something that can retain data. To begin we will make an SR latch. A latch is a circuit that holds data. The following is an example of an SR latch.
+    Let's make a flip flop!
+  </p>
+
+  <h5>Flip Flops</h5>
+
+  <p>
+    We're really getting in the weeds here. To make a flip flop we need something that can retain data. To begin we will make an SR latch. A latch is a circuit that holds data. The following is an example of an SR latch.
   </p>
 
   <figure>
@@ -121,8 +131,10 @@
     Here because of the not gate we can not have an illegal condition of both inputs being high at the same time. There are T flip flops, JK flip flops and SR flip flops. I couldn't get some these flip flops working properly on logisim so I'm not going to show them and they're nor really relevent to me at the moment. Since we have D flip flop we can abstract it away into a single logisim component and it already exists in logisim.
   </p>
 
+  <h5>Creating the LUT</h5>
+
   <p>
-    ##### Creating the LUT To create a Lookup table we needed a memory element that can store our custom truth table. An array of these flip flops that can be programmed are stored in one single register with the size $2^n$ where $n$ is the size of the array. Here is a 4 bit register for 2 inputs.
+    To create a Lookup table we needed a memory element that can store our custom truth table. An array of these flip flops that can be programmed are stored in one single register with the size $2^n$ where $n$ is the size of the array. Here is a 4 bit register for 2 inputs.
   </p>
 
   <figure>
@@ -158,8 +170,10 @@
     I didn't bother going thru the whole range of input options because I was lazy but you get the point.
   </p>
 
+  <h4>Creating the full CLB</h4>
+
   <p>
-    #### Creating the full CLB Now to create a CLB we need to have the LUT, a D flip flop and a mux to select which output to take. The LUT selects an output and a select pin selects whether to choose the output from the flip flop or the LUT. Here's the full CLB. I've chosen to use a ROM instead of a register to create the LUT because they are effictively the same.
+    Now to create a CLB we need to have the LUT, a D flip flop and a mux to select which output to take. The LUT selects an output and a select pin selects whether to choose the output from the flip flop or the LUT. Here's the full CLB. I've chosen to use a ROM instead of a register to create the LUT because they are effictively the same.
   </p>
 
   <figure>

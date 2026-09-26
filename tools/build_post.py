@@ -22,9 +22,9 @@ the same project name (newest first), and adds a "Part of project: ..."
 link under the post's byline. Reuse the exact same project string across
 posts to group them together.
 
-    Body in Markdown. Supports: # and ## and ### headers (mapped to
-    h1/h2/h3, though the post title itself becomes the page's h1 so
-    start the body at ##), paragraphs, **bold**, *italic*, `inline code`,
+    Body in Markdown. Supports: ## through ###### headers (mapped to
+    h2-h6; the post title itself becomes the page's h1 so start the
+    body at ##), paragraphs, **bold**, *italic*, `inline code`,
     [links](url), fenced code blocks (```lang ... ```), images on their
     own line (![alt](src) or ![alt](src "caption")), rendered as a
     <figure> with optional <figcaption>, and LaTeX math left untouched
@@ -177,7 +177,7 @@ def render_body(body):
             continue
 
         # headers
-        h = re.match(r"^(#{2,3})\s+(.*)$", line)
+        h = re.match(r"^(#{2,6})\s+(.*)$", line)
         if h:
             flush_para()
             level = len(h.group(1))
