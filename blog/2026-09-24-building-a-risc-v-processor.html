@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Building a RISC V processor &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+
+<!-- KaTeX: renders $...$ and $$...$$ in the page body. Loaded from a
+     CDN, no build step. Delete this block on pages that have no math. -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="index.html" aria-current="page">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+
+  <p><a href="index.html">&larr; back to blog</a></p>
+
+  <h1>Building a RISC V processor</h1>
+  <p class="byline">2026-09-24 &middot; <span class="tag-list"><span class="tag">RISC V</span></span></p>
+  <p class="project-line">Part of project: <a href="projects/risc-v-processor.html">RISC-V Processor</a></p>
+
+  <p>
+    Before we move on, I've found a BPS space style channel called Breaking Taps. This guy manufactured his own chip and it's really cool!
+  </p>
+
+  <h2>What is an FPGA?</h2>
+
+  <p>
+    An FPGA is a field programmable gate array. As the name suggests it's a gate array that we can program to do our specific task. It's not a general purpose computer so the word 'program' is describing a hardware circuit that gets configured inside the chip. To program an FPGA we use a HDL (Hardware Description Language), the name is self explanatory. But how is it that hardware can be configured?
+  </p>
+
+  <h2>Underneath an FPGA</h2>
+
+  <p>
+    Underneath an FPGA is a mesh of Configurable Logic Blocks (CLB) and Programmable Interconnects. It's in part quite similar to the grid system most north american cities have. The roads represent wires that connect to CLBs and the interconnects are the intersections of these roads. So for data to go from one point to another, data can traverse this grid of wires thru different CLBs to then get modified according to our requirements and provide us with an output. This is a really restricted analogy as it can only describe combinational logic and not sequential one. This FPGA chip is surrounded by IO blocks, used to communicate with external devices.
+  </p>
+
+  <h3>Configurable Logic Blocks</h3>
+
+  <p>
+    Since this blog post series is about me entering rabbit holes, I'm going to try and figure out how a CLB works by making it from scratch in logisim. In <a href="https://github.com/imathrock/FPGA-emulator">this repository</a> I tried creating a small FPGA gate array fabric in logisim and C++ last year (2025). I'm deciding to revive this repository. At the time of writing this repository has some logisim circuits that simulate multiplexers, latches and Flip Flops.
+  </p>
+
+  <p>
+    We know about the gates. All of them are listed as: AND, OR, NOT, XOR. Using these 4 we can create anything. A Configurable logic block looks as follows:
+  </p>
+
+  <figure>
+    <img src="CLB-24-09-26.png" alt="alt text">
+
+  </figure>
+
+  <p>
+    I myself don't see how this fits into the larger picture but this is the simplest form of a CLB I could find on the internet. What we see here is we have a D flip flop, A Multiplexer and a LUT (Lookup table). Let's start by creating these basic components inside logisim-evolution.
+  </p>
+
+  <p>
+    #### Multiplexer This is kinda basic so I'm just gonna show circuits and not explain how they work. A 2 to 1 multiplexer acts as a selection tool. Depending on what the select pin is, the output either comes from one pin or the other. Here's an image of one I created
+  </p>
+
+  <figure>
+    <img src="muxgif1.gif" alt="mux animation">
+
+    <figcaption>How the mux selects its input</figcaption>
+
+  </figure>
+
+  <p>
+    It's possible to chain many of these together to then get $2^n$ size mux, It would have $n$ select pins.
+  </p>
+
+  <p>
+    #### LUT A LUT is a Lookup table. Think of it as a configurable truth table but it's a physical circuit. So how do you make a LUT? A LUT needs to have persistent memory because that is the programmable bit of our Configurable Logic Block. So it needs to have flip flops.
+  </p>
+
+  <p>
+    Let's make a flip flop! ##### Flip Flops We're really getting in the weeds here. To make a flip flop we need something that can retain data. To begin we will make an SR latch. A latch is a circuit that holds data. The following is an example of an SR latch.
+  </p>
+
+  <figure>
+    <video src="20260924-1242-26.8401116.mp4" controls width="100%"></video>
+
+    <figcaption>SR latch</figcaption>
+
+  </figure>
+
+  <p>
+    This latch consists of 2 NOR gates with outputs connected to one another's inputs. We control the 2 reamining inputs. As you can see there can be an illegal combination of inputs where a race condition can be created between the inputs. To get around this we use what's called a gated latch. Simply chuck in some AND gates in there and introduce a clock signal. Like the following:
+  </p>
+
+  <figure>
+    <video src="20260924-1311-32.9307776.mp4" controls width="100%"></video>
+
+    <figcaption>Clocked Gated SR latch</figcaption>
+
+  </figure>
+
+  <p>
+    Next in progression comes the Flip Flop. The following is a D flip flop:
+  </p>
+
+  <figure>
+    <video src="20260924-1329-19.0745021.mp4" controls width="100%"></video>
+
+    <figcaption>D flip flop</figcaption>
+
+  </figure>
+
+  <p>
+    Here because of the not gate we can not have an illegal condition of both inputs being high at the same time. There are T flip flops, JK flip flops and SR flip flops. I couldn't get some these flip flops working properly on logisim so I'm not going to show them and they're nor really relevent to me at the moment. Since we have D flip flop we can abstract it away into a single logisim component and it already exists in logisim.
+  </p>
+
+  <p>
+    ##### Creating the LUT To create a Lookup table we needed a memory element that can store our custom truth table. An array of these flip flops that can be programmed are stored in one single register with the size $2^n$ where $n$ is the size of the array. Here is a 4 bit register for 2 inputs.
+  </p>
+
+  <figure>
+    <video src="20260926-1107-07.2627114.mp4" controls width="100%"></video>
+
+    <figcaption>4 bit register</figcaption>
+
+  </figure>
+
+  <p>
+    The D flip flop has set and reset pins that I have connected together for no reason other than compactness of the circuit. Connecting them does nothing but these set and reset pins have "authority" over the D pin, when set is high or reset is high, the D pin will not work. Now that we can store information, we need to be able to select what comes out based on out 2 inputs and would you look at that we get to use the multiplexer. Here's how I hooked it up to create a 2 input LUT.
+  </p>
+
+  <figure>
+    <video src="20260926-1121-21.9714965.mp4" controls width="100%"></video>
+
+    <figcaption>2 input LUT</figcaption>
+
+  </figure>
+
+  <p>
+    The dip switch box is out input of the LUT, the value written on the left side can be set by programming it and clocking once. Converting this to a 4 input LUT we get the following circuit:
+  </p>
+
+  <figure>
+    <video src="20260926-1136-34.2190547.mp4" controls width="100%"></video>
+
+    <figcaption>4 Input LUT</figcaption>
+
+  </figure>
+
+  <p>
+    I didn't bother going thru the whole range of input options because I was lazy but you get the point.
+  </p>
+
+  <p>
+    #### Creating the full CLB Now to create a CLB we need to have the LUT, a D flip flop and a mux to select which output to take. The LUT selects an output and a select pin selects whether to choose the output from the flip flop or the LUT. Here's the full CLB. I've chosen to use a ROM instead of a register to create the LUT because they are effictively the same.
+  </p>
+
+  <figure>
+    <video src="20260926-1909-19.5097825.mp4" controls width="100%"></video>
+
+    <figcaption>Configurable Logic Block</figcaption>
+
+  </figure>
+
+  <p>
+    In the next blog we will look at how to combine multiple of them in order to get the circuit we want. We will begin it by trying to create all the basic gates using a few of these connected together.
+  </p>
+
+  <p>
+    Joe Barnard says "may your skies be blue and your winds be low". I'd like to create my own.
+  </p>
+
+  <p>
+    <em>May your logic be configurable!</em>
+  </p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    if (window.renderMathInElement) {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ]
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -6,8 +6,13 @@ project: RISC-V Processor
 excerpt: Trying to learn FPGAs to work on a ML hardware acceleration project
 ---
 
+This post will be updated in case the project scope changes. 
+
+## Necessary Background
+I'm going to assume that the reader is a first year engineering/science undergraduate. So know your discrete math and logic gates. 
+
 ## Motivation
-When I was trying to create a CNN framework in C, I realized that it's all matrix multiplication
+When I was trying to create a [CNN framework in C](https://github.com/imathrock/CNNs-in-C), I realized that it's all cleverly crafted matrix multiplication!
 
 ![alt text](rv32blg1meme.png)
 
@@ -19,11 +24,8 @@ Suffice to say I love low level stuff so the natural next step is to build my ow
 
 Here we go, I want this project to be able to do the following:
 - Run the RV32I instruction set sequentially when programmed manually. 
-- Pass the RV32I tests
+- Pass the riscv-tests unit tests
 - Run custom programs using the toolchain provided. 
 - Parallelize into 5 stages (because y86 is 5 stage), fetch, decode, execute, memory, writeback. 
-- Pass the RV32I tests again. 
+- Pass the riscv-tests unit tests for new implementation. 
 - Try to optimize it for GEMM by exploring vector registers. 
-
-## 
-To do this I need to write verilog. Verilog is a Hardware Description Language. From what I know the code that we write there describes the ciruit inside the FPGA. But what is inside an FPGA? 

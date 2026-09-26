@@ -147,12 +147,16 @@ def render_body(body):
             out.append("  <p>\n    $$\n" + "\n".join(math_lines) + "\n    $$\n  </p>\n")
             continue
 
-        # standalone image on its own line -> <figure> with optional caption
+        # standalone image/video on its own line -> <figure> with optional caption
+        # (reuses image markdown syntax; a video-extension src renders <video controls>)
         img = re.match(r'^!\[([^\]]*)\]\(([^)\s]+)(?:\s+"([^"]*)")?\)\s*$', line)
         if img:
             flush_para()
             alt, src, caption = img.group(1), img.group(2), img.group(3)
-            out.append(f'  <figure>\n    <img src="{src}" alt="{html.escape(alt, quote=False)}">\n')
+            if src.lower().endswith((".mp4", ".webm", ".mov")):
+                out.append(f'  <figure>\n    <video src="{src}" controls width="100%"></video>\n')
+            else:
+                out.append(f'  <figure>\n    <img src="{src}" alt="{html.escape(alt, quote=False)}">\n')
             if caption:
                 out.append(f'    <figcaption>{render_inline(caption)}</figcaption>\n')
             out.append("  </figure>\n")
