@@ -1,9 +1,9 @@
 ---
-title: Building a RISC V processor
+title: What's Underneath an FPGA chip?
 date: 2026-09-24
 tags: RISC V
 project: RISC-V Processor
-excerpt: What's Underneath an FPGA chip?
+excerpt: What the heck are they made of?
 ---
 
 Before we move on, I've found a BPS space style channel called Breaking Taps. This guy manufactured his own chip and it's really cool!
