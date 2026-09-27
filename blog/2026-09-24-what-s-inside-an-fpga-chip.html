@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>What's Underneath an FPGA chip? &mdash; Atharv Bhalerao</title>
+<title>What's Inside an FPGA chip? &mdash; Atharv Bhalerao</title>
 <link rel="stylesheet" href="../style.css">
 
 <!-- KaTeX: renders $...$ and $$...$$ in the page body. Loaded from a
@@ -26,7 +26,7 @@
 
   <p><a href="index.html">&larr; back to blog</a></p>
 
-  <h1>What's Underneath an FPGA chip?</h1>
+  <h1>What's Inside an FPGA chip?</h1>
   <p class="byline">2026-09-24 &middot; <span class="tag-list"><span class="tag">RISC V</span></span></p>
   <p class="project-line">Part of project: <a href="projects/risc-v-processor.html">RISC-V Processor</a></p>
 
@@ -40,10 +40,10 @@
     An FPGA is a field programmable gate array. As the name suggests it's a gate array that we can program to do our specific task. It's not a general purpose computer so the word 'program' is describing a hardware circuit that gets configured inside the chip. To program an FPGA we use a HDL (Hardware Description Language), the name is self explanatory. But how is it that hardware can be configured?
   </p>
 
-  <h2>Underneath an FPGA</h2>
+  <h2>Inside an FPGA</h2>
 
   <p>
-    Underneath an FPGA is a mesh of Configurable Logic Blocks (CLB) and Programmable Interconnects. It's in part quite similar to the grid system most north american cities have. The roads represent wires that connect to CLBs and the interconnects are the intersections of these roads. So for data to go from one point to another, data can traverse this grid of wires thru different CLBs to then get modified according to our requirements and provide us with an output. This is a really restricted analogy as it can only describe combinational logic and not sequential one. This FPGA chip is surrounded by IO blocks, used to communicate with external devices.
+    Inside an FPGA is a mesh of Configurable Logic Blocks (CLB) and Programmable Interconnects. It's in part quite similar to the grid system most north american cities have. The roads represent wires that connect to CLBs and the interconnects are the intersections of these roads. So for data to go from one point to another, data can traverse this grid of wires thru different CLBs to then get modified according to our requirements and provide us with an output. This is a quite restricted analogy as it can only describe combinational logic and not sequential one. This FPGA chip is surrounded by IO blocks, used to communicate with external devices.
   </p>
 
   <h3>Configurable Logic Blocks</h3>
@@ -62,7 +62,7 @@
   </figure>
 
   <p>
-    I myself don't see how this fits into the larger picture but this is the simplest form of a CLB I could find on the internet. What we see here is we have a D flip flop, A Multiplexer and a LUT (Lookup table). Let's start by creating these basic components inside logisim-evolution.
+    This seems too basic to run an operating system but this is the primitive used in FPGA that when scaled form the programmable fabric. What we see here is we have a D flip flop, A Multiplexer and a LUT (Lookup table). Let's start by creating these basic components inside logisim-evolution.
   </p>
 
   <h4>Multiplexer</h4>
@@ -128,7 +128,7 @@
   </figure>
 
   <p>
-    Here because of the not gate we can not have an illegal condition of both inputs being high at the same time. There are T flip flops, JK flip flops and SR flip flops. I couldn't get some these flip flops working properly on logisim so I'm not going to show them and they're nor really relevent to me at the moment. Since we have D flip flop we can abstract it away into a single logisim component and it already exists in logisim.
+    Here because of the not gate we can not have an illegal condition of both inputs being high at the same time. There are T flip flops, JK flip flops and SR flip flops. Edge triggered flip-flop behavior gets finicky in Logisim due to gate propagation race conditions, so I'm sticking with standard library primitives here. Since we have D flip flop we can abstract it away into a single logisim component and it already exists in logisim.
   </p>
 
   <h5>Creating the LUT</h5>
@@ -145,7 +145,7 @@
   </figure>
 
   <p>
-    The D flip flop has set and reset pins that I have connected together for no reason other than compactness of the circuit. Connecting them does nothing but these set and reset pins have "authority" over the D pin, when set is high or reset is high, the D pin will not work. Now that we can store information, we need to be able to select what comes out based on out 2 inputs and would you look at that we get to use the multiplexer. Here's how I hooked it up to create a 2 input LUT.
+    The D flip flop has set and reset pins that look connected here but are not actually connected, they're placed in close proximity such that they seem connected. Connecting them does nothing here but these set and reset pins have "authority" over the D pin, when set is high or reset is high, the D pin will not work. Now that we can store information, we need to be able to select what comes out based on out 2 inputs and would you look at that we get to use the multiplexer. Here's how I hooked it up to create a 2 input LUT.
   </p>
 
   <figure>
@@ -167,7 +167,7 @@
   </figure>
 
   <p>
-    I didn't bother going thru the whole range of input options because I was lazy but you get the point.
+    I did not bother going thru the whole range in the video to keep the video short.
   </p>
 
   <h4>Creating the full CLB</h4>
@@ -184,7 +184,19 @@
   </figure>
 
   <p>
-    In the next blog we will look at how to combine multiple of them in order to get the circuit we want. We will begin it by trying to create all the basic gates using a few of these connected together.
+    This is perhaps the most basic CLB one can make. There are some things needed to be cleared. Based on the previous material it might seem that LUTs are only made of an array of flip flops but that is not true, If that is how a register/LUT were then to store a single bit the number of transistors required would be much larger which then becomes a bottleneck. Instead SRAMs are used to store data. A LUT can be thought of as memory where a single bit is read instead of a byte or more and the input is an address.
+  </p>
+
+  <p>
+    The CLBs used in modern FPGAs are more complex than this, they can have multiple LUTs, some adder and multiplier logic and lot more. I found it difficult to get my hands on a diagram that depicts what a modern CLB looks like but the following is a screenshot I took form this video about FPGAs by the youtube channel excessive overkill. <img src="modernCLB.png" alt="alt text"> As it says it's half a CLB. <a href="https://www.youtube.com/watch?v=d3nuepnbmC4">Here's the link to the video</a>
+  </p>
+
+  <p>
+    These CLB's are arranged in a fabric, or a grid like pattern and then connected to each other using programmable interconnects. These programmable interconnects have switchboxes that decide which wire to connect to which CLB and they can be programmed too. Like the following:<img src="fpgafabric.png" alt="alt text"> Building this switchbox and simulating an FPGA fabric in logisim goes into FPGA CAD design stuff that I would like to refrain from going into because this series is about creating a pipelined RISC V CPU and not simulating an FPGA and writing compilers etc and it would not be a constructive detour from the original goal. These chips also contain DSPs that can be used to enhance multiplication and addition operations but I'm cutting the rabbit hole short here for this blog post.
+  </p>
+
+  <p>
+    Moving forward I'm going to begin work on the CPU.
   </p>
 
   <p>
