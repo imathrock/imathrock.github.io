@@ -226,7 +226,7 @@ PAGE_TEMPLATE = """<!DOCTYPE html>
   <p><a href="index.html">&larr; back to blog</a></p>
 
   <h1>{title}</h1>
-  <p class="byline">{date} &middot; <span class="tag-list">{tag_spans}</span></p>
+  <p class="byline">{date} &middot; <span class="tag-list">{tag_spans}</span> &middot; <img class="view-badge" src="https://visitor-badge.laobi.icu/badge?page_id=imathrock.blog.{page_id}" alt="view count"></p>
 {project_line}
 {body}
 </main>
@@ -258,7 +258,7 @@ def tag_list(tags_csv):
     return "".join(f'<span class="tag">{html.escape(t)}</span>' for t in tags), tags
 
 
-def build_page(meta, body_html):
+def build_page(meta, filename, body_html):
     tag_spans, _ = tag_list(meta["tags"])
     year = meta["date"].split("-")[0]
     project_line = ""
@@ -268,11 +268,13 @@ def build_page(meta, body_html):
             f'  <p class="project-line">Part of project: '
             f'<a href="projects/{project_slug}.html">{html.escape(meta["project"], quote=False)}</a></p>\n'
         )
+    page_id = filename.removesuffix(".html")
     return PAGE_TEMPLATE.format(
         title=html.escape(meta["title"], quote=False),
         date=meta["date"],
         tag_spans=tag_spans,
         project_line=project_line,
+        page_id=page_id,
         body=body_html,
         year=year,
     )
@@ -424,7 +426,7 @@ def main():
 
     filename = f"{meta['date']}-{slugify(meta['title'])}.html"
     body_html = render_body(body)
-    page = build_page(meta, body_html)
+    page = build_page(meta, filename, body_html)
 
     BLOG_DIR.mkdir(exist_ok=True)
     (BLOG_DIR / filename).write_text(page, encoding="utf-8")

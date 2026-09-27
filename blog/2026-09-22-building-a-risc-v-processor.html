@@ -27,13 +27,23 @@
   <p><a href="index.html">&larr; back to blog</a></p>
 
   <h1>Building a RISC V processor</h1>
-  <p class="byline">2026-09-22 &middot; <span class="tag-list"><span class="tag">RISC V</span></span></p>
+  <p class="byline">2026-09-22 &middot; <span class="tag-list"><span class="tag">RISC V</span></span> &middot; <img class="view-badge" src="https://visitor-badge.laobi.icu/badge?page_id=imathrock.blog.2026-09-22-building-a-risc-v-processor" alt="view count"></p>
   <p class="project-line">Part of project: <a href="projects/risc-v-processor.html">RISC-V Processor</a></p>
+
+  <p>
+    This post will be updated in case the project scope changes.
+  </p>
+
+  <h2>Necessary Background</h2>
+
+  <p>
+    I'm going to assume that the reader is a first year engineering/science undergraduate. So know your discrete math and logic gates.
+  </p>
 
   <h2>Motivation</h2>
 
   <p>
-    When I was trying to create a CNN framework in C, I realized that it's all matrix multiplication
+    When I was trying to create a <a href="https://github.com/imathrock/CNNs-in-C">CNN framework in C</a>, I realized that it's all cleverly crafted matrix multiplication!
   </p>
 
   <figure>
@@ -59,23 +69,17 @@
 
     <li>Run the RV32I instruction set sequentially when programmed manually.</li>
 
-    <li>Pass the RV32I tests</li>
+    <li>Pass the riscv-tests unit tests</li>
 
     <li>Run custom programs using the toolchain provided.</li>
 
     <li>Parallelize into 5 stages (because y86 is 5 stage), fetch, decode, execute, memory, writeback.</li>
 
-    <li>Pass the RV32I tests again.</li>
+    <li>Pass the riscv-tests unit tests for new implementation.</li>
 
     <li>Try to optimize it for GEMM by exploring vector registers.</li>
 
   </ul>
-
-  <h2></h2>
-
-  <p>
-    To do this I need to write verilog. Verilog is a Hardware Description Language. From what I know the code that we write there describes the ciruit inside the FPGA. But what is inside an FPGA?
-  </p>
 
 </main>
 
