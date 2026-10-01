@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build Log &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="../log/index.html" aria-current="page">Build Log</a>
+  </nav>
+</header>
+
+<main class="page">
+  <h1>Build Log: RISC-V Processor with Vector GEMM on an FPGA</h1>
+  <p>A daily log of building an RV32I processor on a DE1-SoC, then adding a vector extension subset and optimizing it for GEMM with the FPGA's DSP blocks.</p>
+
+  <p class="progress">Milestones: 1 of 10 done</p>
+
+  <h2>The project</h2>
+
+  <p>
+    I want to build a RISC-V CPU from scratch in Verilog on a DE1-SoC (Cyclone V) FPGA board, and then make it good at matrix multiplication. I've already written GEMM in software (AVX and pthreads in my <a href="https://github.com/imathrock/CNNs-in-C">CNN framework</a>); this is the hardware side of the same problem.
+  </p>
+
+  <p>
+    Plan: a sequential RV32I core, then a 5-stage pipeline, then a vector extension subset with a GEMM kernel that uses the DSP blocks.
+  </p>
+
+  <h2>Milestones</h2>
+
+  <ul class="checklist">
+
+    <li class="done">Understand how an FPGA is built (LUTs, CLBs, interconnect)</li>
+
+    <li>Read the RV32I base ISA chapters of the manual</li>
+
+    <li>Set up the toolchain: Quartus, a simulator, the RISC-V GCC toolchain</li>
+
+    <li>Sequential RV32I core running hand-written programs</li>
+
+    <li>Sequential core passes riscv-tests</li>
+
+    <li>Run C programs compiled with the RISC-V toolchain</li>
+
+    <li>5-stage pipeline: fetch, decode, execute, memory, writeback</li>
+
+    <li>Pipelined core passes riscv-tests</li>
+
+    <li>Vector extension subset with a fixed vector length</li>
+
+    <li>GEMM kernel on the DSP blocks, benchmarked</li>
+
+  </ul>
+
+  <h2>Results</h2>
+
+  <p>
+    Filled in as I measure things. A dash means not measured yet.
+  </p>
+
+  <table>
+    <thead><tr><th>Design</th><th>Fmax</th><th>Logic used</th><th>DSPs used</th><th>GEMM throughput</th></tr></thead>
+    <tbody>
+      <tr><td>Sequential RV32I</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+      <tr><td>5-stage pipeline</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+      <tr><td>Vector + DSP GEMM</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Baseline to beat: my AVX GEMM on a desktop CPU, and the scalar core running the same kernel.
+  </p>
+
+  <h2>Entries</h2>
+  <p>Newest first. One short entry per working session: goal, what happened, evidence, next.</p>
+
+  <ul class="entry-list">
+    <li>
+      <span class="entry-date">2026-09-26</span>
+      &mdash;
+      <span class="entry-title"><a href="2026-09-26.html">Building a LUT and a full CLB</a></span> <span class="entry-num">Log #3</span>
+      <p class="entry-excerpt">Built 2- and 4-input LUTs and a complete configurable logic block in Logisim, then looked at how real FPGAs differ.</p>
+      <p class="tag-list"><span class="tag">fpga</span><span class="tag">digital-logic</span></p>
+    </li>
+    <li>
+      <span class="entry-date">2026-09-24</span>
+      &mdash;
+      <span class="entry-title"><a href="2026-09-24.html">What's inside an FPGA chip? Latches and flip flops</a></span> <span class="entry-num">Log #2</span>
+      <p class="entry-excerpt">What an FPGA is made of, and building SR latches and a D flip flop in Logisim on the way to a configurable logic block.</p>
+      <p class="tag-list"><span class="tag">fpga</span><span class="tag">digital-logic</span></p>
+    </li>
+    <li>
+      <span class="entry-date">2026-09-22</span>
+      &mdash;
+      <span class="entry-title"><a href="2026-09-22.html">Kickoff: scope and motivation</a></span> <span class="entry-num">Log #1</span>
+      <p class="entry-excerpt">Why I'm building a RISC-V processor on my DE1-SoC, and what done looks like.</p>
+      <p class="tag-list"><span class="tag">risc-v</span><span class="tag">planning</span></p>
+    </li>
+  </ul>
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+</body>
+</html>

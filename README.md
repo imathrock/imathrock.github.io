@@ -8,27 +8,23 @@ no chrome.
 
 ## Stack
 
-There isn't one. This is hand-written HTML and a single CSS file:
+Hand-written HTML, one CSS file, and one small Python script
+(`tools/buildlog.py`, no dependencies) that turns markdown build-log
+entries into static pages:
 
 ```
-index.html         Home / about
+index.html         Home / about (has an auto-updated "latest build log" window)
 experience.html    Professional experience
 projects.html      Project write-ups
-blog/
-  index.html        Post index (edit this to list a new post)
-  YYYY-MM-DD-*.html One file per post
-style.css           The only stylesheet, shared by every page
-assets/             Images, résumé PDF
+log/               GENERATED build log (index + one page per entry), log/img/ for images
+src/               Markdown sources: project.md, entries/, pages/
+tools/buildlog.py  python tools/buildlog.py new | build
+style.css          The only stylesheet, shared by every page
+assets/            Images, resume PDF
 ```
 
-No framework, no build step, no backend, no npm/pip install. A browser
-can open `index.html` directly and the whole site works.
-
-Math is the one modern concession: pages that need equations load
-[KaTeX](https://katex.org/) from a CDN and auto-render `$...$` (inline)
-and `$$...$$` (display) delimiters client-side. See the `<head>` and the
-closing `<script>` block in
-`blog/2026-09-22-why-this-notebook.html` for the exact snippet to copy.
+The generated pages are committed, so the site deploys as plain static
+files. Math pages load [KaTeX](https://katex.org/) from a CDN.
 
 ## Editing locally
 
@@ -43,16 +39,14 @@ python -m http.server 8000
 
 Then visit http://localhost:8000/.
 
-## Adding a blog post
+## Writing a build-log entry
 
-1. Copy `blog/2026-09-22-why-this-notebook.html` to
-   `blog/YYYY-MM-DD-slug.html`.
-2. Replace the title, byline, and body. Keep the KaTeX `<head>` block
-   if the post has math; delete it if not.
-3. Add a matching `<li>` entry to `blog/index.html`, above the previous
-   newest post.
+```powershell
+python tools/buildlog.py new "Short title"   # then edit src/entries/<today>.md
+python tools/buildlog.py build
+```
 
-That's the entire publishing workflow.
+See [HOWTO.md](HOWTO.md) for the entry format and the full workflow.
 
 ## Adding a page
 

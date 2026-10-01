@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's inside an FPGA chip? Latches and flip flops &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+
+<!-- KaTeX: renders $...$ and $$...$$ in the page body (loaded only when the page has math). -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="../log/index.html" aria-current="page">Build Log</a>
+  </nav>
+</header>
+
+<main class="page">
+  <p><a href="index.html">&larr; back to build log</a></p>
+
+  <h1>What's inside an FPGA chip? Latches and flip flops</h1>
+  <p class="byline">2026-09-24 &middot; Log #2 &middot; <span class="tag-list"><span class="tag">fpga</span><span class="tag">digital-logic</span></span> &middot; <img class="view-badge" src="https://visitor-badge.laobi.icu/badge?page_id=imathrock.log.2026-09-24" alt="view count"></p>
+
+  <p>
+    Before we move on, I've found a BPS space style channel called Breaking Taps. This guy manufactured his own chip and it's really cool!
+  </p>
+
+  <h2>Goal</h2>
+
+  <p>
+    Understand what an FPGA actually is before I program one, by building a configurable logic block (CLB) from scratch in Logisim.
+  </p>
+
+  <h2>What is an FPGA?</h2>
+
+  <p>
+    An FPGA is a field programmable gate array. As the name suggests it's a gate array that we can program to do our specific task. It's not a general purpose computer so the word 'program' is describing a hardware circuit that gets configured inside the chip. To program an FPGA we use a HDL (Hardware Description Language), the name is self explanatory. But how is it that hardware can be configured?
+  </p>
+
+  <h2>Inside an FPGA</h2>
+
+  <p>
+    Inside an FPGA is a mesh of Configurable Logic Blocks (CLB) and Programmable Interconnects. It's in part quite similar to the grid system most north american cities have. The roads represent wires that connect to CLBs and the interconnects are the intersections of these roads. So for data to go from one point to another, data can traverse this grid of wires thru different CLBs to then get modified according to our requirements and provide us with an output. This is a quite restricted analogy as it can only describe combinational logic and not sequential one. This FPGA chip is surrounded by IO blocks, used to communicate with external devices.
+  </p>
+
+  <h3>Configurable Logic Blocks</h3>
+
+  <p>
+    I'm going to try and figure out how a CLB works by making it from scratch in logisim. In <a href="https://github.com/imathrock/FPGA-emulator">this repository</a> I tried creating a small FPGA gate array fabric in logisim and C++ last year (2025). I'm deciding to revive this repository. At the time of writing this repository has some logisim circuits that simulate multiplexers, latches and Flip Flops.
+  </p>
+
+  <p>
+    We know about the gates. All of them are listed as: AND, OR, NOT, XOR. Using these 4 we can create anything. A Configurable logic block looks as follows:
+  </p>
+
+  <figure>
+    <img src="img/CLB-24-09-26.png" alt="Configurable logic block diagram">
+
+  </figure>
+
+  <p>
+    This seems too basic to run an operating system but this is the primitive used in FPGA that when scaled form the programmable fabric. What we see here is we have a D flip flop, A Multiplexer and a LUT (Lookup table). Let's start by creating these basic components inside logisim-evolution.
+  </p>
+
+  <h4>Multiplexer</h4>
+
+  <p>
+    This is kinda basic so I'm just gonna show circuits and not explain how they work. A 2 to 1 multiplexer acts as a selection tool. Depending on what the select pin is, the output either comes from one pin or the other. Here's an image of one I created
+  </p>
+
+  <figure>
+    <img src="img/muxgif1.gif" alt="mux animation">
+
+    <figcaption>How the mux selects its input</figcaption>
+
+  </figure>
+
+  <p>
+    It's possible to chain many of these together to then get $2^n$ size mux, It would have $n$ select pins.
+  </p>
+
+  <h4>Flip flops</h4>
+
+  <p>
+    A LUT is a lookup table, and it needs persistent memory because that is the programmable bit of our Configurable Logic Block. So it needs flip flops.
+  </p>
+
+  <p>
+    We're really getting in the weeds here. To make a flip flop we need something that can retain data. To begin we will make an SR latch. A latch is a circuit that holds data. This latch consists of 2 NOR gates with outputs connected to one another's inputs. We control the 2 remaining inputs. There can be an illegal combination of inputs where a race condition can be created between the inputs. To get around this we use what's called a gated latch. Simply chuck in some AND gates in there and introduce a clock signal.
+  </p>
+
+  <p>
+    Next in progression comes the Flip Flop. In a D flip flop, because of the not gate we can not have an illegal condition of both inputs being high at the same time. There are T flip flops, JK flip flops and SR flip flops. Edge triggered flip-flop behavior gets finicky in Logisim due to gate propagation race conditions, so I'm sticking with standard library primitives here. Since we have D flip flop we can abstract it away into a single logisim component and it already exists in logisim.
+  </p>
+
+  <h2>Next</h2>
+
+  <p>
+    Use the flip flops to build the LUT, then put the LUT, a flip flop and a mux together into a full CLB.
+  </p>
+
+  <p class="pager"><a href="2026-09-22.html">&larr; Log #1: Kickoff: scope and motivation</a> <span class="sep">|</span> <a href="2026-09-26.html">Log #3: Building a LUT and a full CLB &rarr;</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    if (window.renderMathInElement) {
+      renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false }
+        ]
+      });
+    }
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,33 @@
+---
+title: Learning the RISC V ISA
+date: 2026-09-28
+tags: RISC V
+project: RISC-V Processor
+excerpt: Trying to read the manual and understand how the ISA works
+---
+
+I downloaded the RISC V Instruction Set Manual Volume 1 and I began reading it.
+
+## What's RISC V
+RISC V is an open source family of ISAs that are free to use for people in academia and industry. It's defined to avoid implementation details and restrictions as much as possible, as the goal is to encourage research into different kinds of implementations and to avoid constraining what these implementations can do. 
+
+RISC stands for Reduced Instruction Set Computer. There is a counterpart to this which is CISC Complex instruction set computer. All of your modern CPUs and GPUs use these complex ISAs where there exist a large range of instructions that attempt at doing in 1 instruction what a RISC computer might take many. An example of a CISC is x86, the architecture created by intel, licenced to amd, of which then amd created a 64 bit version (x86-64) and licenced to intel. A simple comparision between RISC V and x86 is to look at the number of instructions supported. The most complex RV64G set has 160 instructions, meanwhile x86 has over 1000 instructions!
+
+Interesting thoughts aside, the one I plan on implementing is the RV32I ISA. There are 4 base ISAs and they are not compatible with each other but they can be made so from what I understand. The incompatibility exists so that implementing one should be enough and it need not satisfy the other ISA's requirements. Each one of these ISAs have their own optional extensions that one can use to expand and add features.
+
+The memory address space of RISC V is circular, as in the address 0x00000000 is ahead of address 0xffffffff, think of it as the memory wraps around. I described the address using 4 bytes which is the addressable space of our specific ISA. 
+
+## The RV32I Base Integer instruction set ver 2.1
+There are a total of 40 instructions in the ISA. It does not support floating point operations, only integers. This set is designed to have 32 total registers. Unlike y86 which is the toy version of x86 we have registers such as stack pointer and base pointer register, there are none of those here. The register x0 is hardwired to be all zeros. There is one program counter register too. There are some control and status registers aswell. Each of these registers have a word size of 4 bytes, or 32 bits, hence the name RV*32I*. 
+
+According to standard calling conventions:
+- Register x1 holds return address for a call.
+- Register x2 is the stack pointer
+- Register x5 is the alternate link register. 
+
+This design can also support 16 total registers but creating a 16 bit instruction would have been difficult because it's not possible to encode the complete ISA in 16 bits with 3 address format. There does however exist RV32E, which is a subset and supports 16 registers instead. Every instruction is 32 bits and every instruction must be aligned with a 4 byte memory boundary. Some architectures such as x86 and y86 support instructions of various sizes and they do not all have to be aligned to memory boundaries but that is a bit out of scope here and also not part of RV32I specifications.
+
+The first 7 bits are always used for opcode, bits 0 to 6. The destination register **rd** is always defined from bits 7 to 11. There's a lot more ways to write an instruction and the following are the types. I had to search separately for this because these are not mentioned in the manual. I will be frank the manual is kinda poor at first glance because there are a lot of asides that can get confusing and break the flow of thought. 
+There are 4 core instruction formats defined as such:
+#### R
+R stands for register to register. These are the instructions that move data from one register to another. They are structured as follows:
