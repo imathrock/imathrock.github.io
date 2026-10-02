@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning the RISC V ISA &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="../log/index.html" aria-current="page">Build Log</a><span class="sep">|</span><a href="../blog/index.html">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+  <p><a href="index.html">&larr; back to build log</a></p>
+
+  <h1>Learning the RISC V ISA</h1>
+  <p class="byline">2026-09-28 &middot; Log #4 &middot; <span class="tag-list"><span class="tag">risc-v</span><span class="tag">isa</span></span> &middot; <img class="view-badge" src="https://visitor-badge.laobi.icu/badge?page_id=imathrock.log.2026-09-28" alt="view count"></p>
+
+  <p>
+    I downloaded the RISC V Instruction Set Manual Volume 1 and I began reading it.
+  </p>
+
+  <h2>What's RISC V</h2>
+
+  <p>
+    RISC V is an open source family of ISAs that are free to use for people in academia and industry. It's defined to avoid implementation details and restrictions as much as possible, as the goal is to encourage research into different kinds of implementations and to avoid constraining what these implementations can do.
+  </p>
+
+  <p>
+    RISC stands for Reduced Instruction Set Computer. There is a counterpart to this which is CISC Complex instruction set computer. All of your modern CPUs and GPUs use these complex ISAs where there exist a large range of instructions that attempt at doing in 1 instruction what a RISC computer might take many. An example of a CISC is x86, the architecture created by intel, licenced to amd, of which then amd created a 64 bit version (x86-64) and licenced to intel. A simple comparision between RISC V and x86 is to look at the number of instructions supported. The most complex RV64G set has 160 instructions, meanwhile x86 has over 1000 instructions!
+  </p>
+
+  <p>
+    Interesting thoughts aside, the one I plan on implementing is the RV32I ISA. There are 4 base ISAs and they are not compatible with each other but they can be made so from what I understand. The incompatibility exists so that implementing one should be enough and it need not satisfy the other ISA's requirements. Each one of these ISAs have their own optional extensions that one can use to expand and add features.
+  </p>
+
+  <p>
+    The memory address space of RISC V is circular, as in the address 0x00000000 is ahead of address 0xffffffff. I described the address using 4 bytes which is the addressable space of our specific ISA.
+  </p>
+
+  <h2>The RV32I Base Integer instruction set ver 2.1</h2>
+
+  <p>
+    There are a total of 40 instructions in the ISA. It does not support floating point operations, only integers. This set is designed to have 32 total registers. Unlike y86 which is the toy version of x86 we have registers such as stack pointer and base pointer register, there are none of those here. The register x0 is hardwired to be all zeros. There is one program counter register too. There are some control and status registers aswell. Each of these registers have a word size of 4 bytes, or 32 bits, hence the name RV<em>32I</em>.
+  </p>
+
+  <p>
+    According to standard calling conventions:
+  </p>
+
+  <ul>
+
+    <li>Register x1 holds return address for a call.</li>
+
+    <li>Register x2 is the stack pointer</li>
+
+    <li>Register x5 is the alternate link register.</li>
+
+  </ul>
+
+  <p>
+    This design can also support 16 total registers but creating a 16 bit instruction would have been difficult because it's not possible to encode the complete ISA in 16 bits with 3 address format. There does however exist RV32E, which is a subset and supports 16 registers instead. Every instruction is 32 bits and every instruction must be aligned with a 4 byte memory boundary. Some architectures such as x86 and y86 support instructions of various sizes and they do not all have to be aligned to memory boundaries but that is a bit out of scope here and also not part of RV32I specifications.
+  </p>
+
+  <p>
+    The first 7 bits are always used for opcode, bits 0 to 6. The destination register <strong>rd</strong> is always defined from bits 7 to 11.
+  </p>
+
+  <p>
+    Next I would study more about the ISA.
+  </p>
+
+  <p class="pager"><a href="2026-09-26.html">&larr; Log #3: Building a LUT and a full CLB</a> <span class="sep">|</span> <a href="2026-10-01.html">Log #5: Learning the RISC V ISA &rarr;</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+</body>
+</html>

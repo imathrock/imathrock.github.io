@@ -17,7 +17,8 @@ index.html         Home / about (has an auto-updated "latest build log" window)
 experience.html    Professional experience
 projects.html      Project write-ups
 log/               GENERATED build log (index + one page per entry), log/img/ for images
-src/               Markdown sources: project.md, entries/, pages/
+blog/              GENERATED blog (essays that aren't log entries)
+src/               Markdown sources: project.md, entries/, blog/
 tools/buildlog.py  python tools/buildlog.py new | build
 style.css          The only stylesheet, shared by every page
 assets/            Images, resume PDF

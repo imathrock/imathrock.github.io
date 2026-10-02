@@ -31,7 +31,7 @@ If `summary` is left out, the first paragraph is used. Two entries on one day: `
 |---|---|
 | `src/entries/*.md` | `log/YYYY-MM-DD.html`, `log/index.html` |
 | `src/project.md` (goal, milestone checklist, results table) | the block between `LATEST-LOG` markers in `index.html` |
-| `src/pages/*.md` (standalone pages, become `<name>.html`) | `autodidacticism.html` |
+| `src/blog/*.md` (essays that aren't log entries) | `blog/*.html`, `blog/index.html` |
 
 `src/project.md` is the top of the build-log page. Tick milestones with `- [x]`; the
 "Milestones: N of M done" line updates itself. Fill in the results table as you measure things.
@@ -46,6 +46,10 @@ If `summary` is left out, the first paragraph is used. Two entries on one day: `
 Everything is CSS variables at the top of `style.css` (`:root { ... }`). Change the hex values,
 save, refresh.
 
-## Add a page
-Static page with markdown: add `src/pages/<name>.md` (with `title:` front matter) and run `build`.
-Hand-written page: copy an existing top-level page and keep the `site-header` / `nav` / `site-footer` markup.
+## Add a blog post (not a log entry)
+Same front matter as an entry, but the file goes in `src/blog/YYYY-MM-DD-slug.md` and `build`
+publishes it to `blog/YYYY-MM-DD-slug.html` and lists it on `blog/index.html`.
+Images: write paths relative to the generated page, e.g. `../assets/pic.png`.
+
+## Add a hand-written page
+Copy an existing top-level page and keep the `site-header` / `nav` / `site-footer` markup.

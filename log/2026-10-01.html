@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning the RISC V ISA &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="../log/index.html" aria-current="page">Build Log</a><span class="sep">|</span><a href="../blog/index.html">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+  <p><a href="index.html">&larr; back to build log</a></p>
+
+  <h1>Learning the RISC V ISA</h1>
+  <p class="byline">2026-09-28 &middot; Log #5 &middot; <span class="tag-list"><span class="tag">risc-v</span><span class="tag">isa</span></span> &middot; <img class="view-badge" src="https://visitor-badge.laobi.icu/badge?page_id=imathrock.log.2026-10-01" alt="view count"></p>
+
+  <p>
+    # Architecture
+  </p>
+
+  <p>
+    Lets look at an example instruction:
+  </p>
+
+  <pre><code>mylable:    add  x5, x7, x6</code></pre>
+
+  <p>
+    This line adds contents of x7 and x6 into x5. mylabel is a label that is identified using ":". opcode is "add" and the registers are operands.
+  </p>
+
+  <p>
+    These registers can also be referred using a completely alternate naming convention like:
+  </p>
+
+  <pre><code>- x0: zero
+- x1: ra # return address
+- x2: sp # stack pointer
+- x3: gp # global pointer
+- x4: tp # thread pointer
+- x5: t0 # temporaries</code></pre>
+
+  <p>
+    and a lot more. We would use them interchangably.
+  </p>
+
+  <p>
+    Looking at some registers in more detail:
+  </p>
+
+  <ul>
+
+    <li>x0, zero. hardwired to always contain zero, done so because it's useful.</li>
+
+    <li>ra, x1. The <em>call</em> instruction does not push the return address to the stack it just stores it in ra. The <em>ret</em> instruction simply jumps to the address in ra. It's beneficial because we do not waste time fetching from memory the return address, but like only beneficial in leaf calls. If it's nested then better store it on the stack.</li>
+
+    <li>sp, In some computers the stack pointer is a dedicated register but in risc V you can use any general purpose register. By convention its x2.</li>
+
+    <li>a0 - a7 are all argument registers, by convention functions return in a0. These are to be not changed during a function call unless it's a nested call.</li>
+
+    <li>t0 - t6 are scratch registers as in they are to be worked on by the function, these are caller saved, a called function might tamper with them</li>
+
+    <li>s0 - s11 are similar to temp registers. These are callee saved, like if they're used then they must save the old values and then bring them back after being used.</li>
+
+    <li>gp is the global pointer, it's a pointer where global or static variables are kept to make addressing easier.</li>
+
+    <li>tp is a thread pointer, thread specific variables are kept there.</li>
+
+  </ul>
+
+  <p>
+    I know how ISAs and assemblers work and what labels are, refer to my LC3 vm project.
+  </p>
+
+  <p class="pager"><a href="2026-09-28.html">&larr; Log #4: Learning the RISC V ISA</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+</body>
+</html>

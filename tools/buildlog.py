@@ -8,12 +8,13 @@ Build-log generator for this site. Plain Python 3, no dependencies.
 Sources (you edit these):
     src/project.md             goal, milestone checklist, results table
     src/entries/YYYY-MM-DD.md  one build-log entry per day
-    src/pages/<name>.md        standalone pages  ->  <name>.html (site root)
+    src/blog/YYYY-MM-DD-slug.md  essays that aren't build-log entries (the Blog section)
 
 Generated (don't edit, rebuilt every run):
     log/index.html             project header + every entry, newest first
     log/YYYY-MM-DD.html        one page per entry
-    <name>.html                standalone pages
+    blog/index.html            blog index
+    blog/YYYY-MM-DD-slug.html  one page per blog post
     index.html                 only the block between the LATEST-LOG markers
 
 Entry front matter:
@@ -43,7 +44,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 SRC = ROOT / "src"
 ENTRIES_DIR = SRC / "entries"
-PAGES_DIR = SRC / "pages"
+BLOG_SRC = SRC / "blog"
+BLOG_DIR = ROOT / "blog"
 PROJECT_SRC = SRC / "project.md"
 LOG_DIR = ROOT / "log"
 HOME = ROOT / "index.html"
@@ -298,7 +300,7 @@ PAGE = """<!DOCTYPE html>
   <p class="site-title"><a href="@@root@@index.html">Atharv Bhalerao</a></p>
   <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
   <nav class="site-nav">
-    <a href="@@root@@index.html">Home</a><span class="sep">|</span><a href="@@root@@experience.html">Experience</a><span class="sep">|</span><a href="@@root@@projects.html">Projects</a><span class="sep">|</span><a href="@@root@@log/index.html"@@current@@>Build Log</a>
+    <a href="@@root@@index.html">Home</a><span class="sep">|</span><a href="@@root@@experience.html">Experience</a><span class="sep">|</span><a href="@@root@@projects.html">Projects</a><span class="sep">|</span><a href="@@root@@log/index.html"@@current_log@@>Build Log</a><span class="sep">|</span><a href="@@root@@blog/index.html"@@current_blog@@>Blog</a>
   </nav>
 </header>
 
@@ -343,9 +345,11 @@ def fill(template, **kw):
     return template
 
 
-def page(root, title, main, year, current=False, math=False):
+def page(root, title, main, year, current="", math=False):
+    """current is "log" or "blog": which nav link gets aria-current."""
+    mark = ' aria-current="page"'
     return fill(PAGE, root=root, title=html.escape(title, quote=False), main=main, year=str(year),
-                current=' aria-current="page"' if current else "",
+                current_log=mark if current == "log" else "", current_blog=mark if current == "blog" else "",
                 katex=KATEX_HEAD if math else "", script=KATEX_SCRIPT if math else "")
 
 
@@ -391,7 +395,7 @@ def entry_page(e, prev, nxt):
     main = (f'  <p><a href="index.html">&larr; back to build log</a></p>\n\n'
             f'  <h1>{html.escape(e["title"], quote=False)}</h1>\n'
             f'  <p class="byline">{byline}</p>\n\n{body_html}\n{pager}')
-    return page("../", e["title"], main, e["date"][:4], current=True, math="$" in e["body"])
+    return page("../", e["title"], main, e["date"][:4], current="log", math="$" in e["body"])
 
 
 def project_block():
@@ -425,7 +429,7 @@ def index_page(entries):
             f'  <p>Newest first. One short entry per working session: goal, what happened, evidence, next.</p>\n\n'
             f'  <ul class="entry-list">\n{listing}\n  </ul>')
     year = entries[-1]["date"][:4] if entries else str(datetime.date.today().year)
-    return page("../", "Build Log", main, year, current=True)
+    return page("../", "Build Log", main, year, current="log")
 
 
 def home_window(entries):
@@ -454,18 +458,54 @@ def update_home(entries):
     HOME.write_text(pattern.sub(lambda m: home_window(entries), text, count=1), encoding="utf-8")
 
 
-def build_pages():
-    count = 0
-    for path in sorted(PAGES_DIR.glob("*.md")):
+def build_blog():
+    posts = []
+    for path in sorted(BLOG_SRC.glob("*.md")):
         meta, body = parse_front_matter(path.read_text(encoding="utf-8"), path.name)
-        title = meta.get("title", path.stem)
-        date = meta.get("date", "")
-        byline = f'  <p class="byline">{date}</p>\n' if date else ""
-        main = f'  <h1>{html.escape(title, quote=False)}</h1>\n{byline}\n{render_body(body)}'
-        year = date[:4] if date else str(datetime.date.today().year)
-        (ROOT / f"{path.stem}.html").write_text(page("", title, main, year, math="$" in body), encoding="utf-8")
-        count += 1
-    return count
+        if is_draft(meta):
+            continue
+        for required in ("title", "date"):
+            if required not in meta:
+                sys.exit(f"error: {path.name} front matter missing '{required}'")
+        posts.append({"stem": path.stem, "meta": meta, "body": body, "title": meta["title"], "date": meta["date"],
+                      "tags": meta.get("tags", ""),
+                      "summary": meta.get("summary") or meta.get("excerpt") or truncate(first_paragraph(body), 220)})
+    posts.sort(key=lambda p: (p["date"], p["stem"]), reverse=True)
+
+    BLOG_DIR.mkdir(exist_ok=True)
+    wanted = {f"{p['stem']}.html" for p in posts} | {"index.html"}
+    for old in BLOG_DIR.glob("*.html"):
+        if old.name not in wanted:
+            old.unlink()
+
+    items = []
+    for p in posts:
+        tags = tag_spans(p["tags"])
+        byline = p["date"]
+        if tags:
+            byline += f' &middot; <span class="tag-list">{tags}</span>'
+        byline += (f' &middot; <img class="view-badge" '
+                   f'src="https://visitor-badge.laobi.icu/badge?page_id=imathrock.blog.{p["stem"]}" alt="view count">')
+        main = (f'  <p><a href="index.html">&larr; back to blog</a></p>\n\n'
+                f'  <h1>{html.escape(p["title"], quote=False)}</h1>\n'
+                f'  <p class="byline">{byline}</p>\n\n{render_body(p["body"])}')
+        (BLOG_DIR / f"{p['stem']}.html").write_text(
+            page("../", p["title"], main, p["date"][:4], current="blog", math="$" in p["body"]), encoding="utf-8")
+        items.append(
+            f'    <li>\n'
+            f'      <span class="entry-date">{p["date"]}</span>\n'
+            f'      &mdash;\n'
+            f'      <span class="entry-title"><a href="{p["stem"]}.html">{html.escape(p["title"], quote=False)}</a></span>\n'
+            + (f'      <p class="entry-excerpt">{html.escape(p["summary"], quote=False)}</p>\n' if p["summary"] else "")
+            + (f'      <p class="tag-list">{tags}</p>\n' if tags else "")
+            + "    </li>")
+    listing = "\n".join(items) if items else "    <li>No posts yet.</li>"
+    main = ('  <h1>Blog</h1>\n'
+            '  <p>Essays and write-ups that are not part of the day-to-day <a href="../log/index.html">build log</a>.</p>\n\n'
+            f'  <ul class="entry-list">\n{listing}\n  </ul>')
+    year = posts[0]["date"][:4] if posts else str(datetime.date.today().year)
+    (BLOG_DIR / "index.html").write_text(page("../", "Blog", main, year, current="blog"), encoding="utf-8")
+    return len(posts)
 
 
 # -------------------------------- commands -------------------------------
@@ -485,9 +525,9 @@ def cmd_build():
         (LOG_DIR / f"{e['stem']}.html").write_text(entry_page(e, prev, nxt), encoding="utf-8")
     (LOG_DIR / "index.html").write_text(index_page(entries), encoding="utf-8")
     update_home(entries)
-    pages = build_pages()
+    posts = build_blog()
 
-    print(f"built {len(entries)} entries, log/index.html, home-page window, {pages} page(s)")
+    print(f"built {len(entries)} entries, log/index.html, home-page window, {posts} blog post(s)")
     if entries:
         print(f"latest: {entries[-1]['date']}  {entries[-1]['title']}")
     for d in drafts:
