@@ -10,7 +10,7 @@ Plan: a sequential RV32I core, then a 5-stage pipeline, then a vector extension 
 
 ## Milestones
 - [x] Understand how an FPGA is built (LUTs, CLBs, interconnect)
-- [ ] Read the RV32I base ISA chapters of the manual
+- [x] Read the RV32I base ISA chapters of the manual
 - [ ] Set up the toolchain: Quartus, a simulator, the RISC-V GCC toolchain
 - [ ] Sequential RV32I core running hand-written programs
 - [ ] Sequential core passes riscv-tests

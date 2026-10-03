@@ -29,6 +29,17 @@ body {
   line-height: 1.6;
 }
 
+/* faint photo behind the home page only */
+body.home::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: url("assets/background.jpeg") center / cover no-repeat;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
 /* ---------------------------- layout ---------------------------- */
 
 .page {

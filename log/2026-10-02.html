@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reading more about ISA and refreshing verilog &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="../log/index.html" aria-current="page">Build Log</a><span class="sep">|</span><a href="../blog/index.html">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+  <p><a href="index.html">&larr; back to build log</a></p>
+
+  <h1>Reading more about ISA and refreshing verilog</h1>
+  <p class="byline">2026-10-02 &middot; Log #6 &middot; <span class="tag-list"><span class="tag">risc-v</span><span class="tag">isa</span></span> &middot; <img class="view-badge" src="https://visitor-badge.laobi.icu/badge?page_id=imathrock.log.2026-10-02" alt="view count"></p>
+
+  <p>
+    I'm watching this <a href="https://www.youtube.com/watch?v=VEQL5bJeWB0&amp;list=PLbtzT1TYeoMiKup6aoQc3V_d7OvOKc3P5">series</a>
+  </p>
+
+  <p>
+    A detail to remember about the ISA is that destination <em>registers</em> come first in an instruction, as we saw they are represented by bits 7 to 11. But the store instructions have the <em>destination address</em> last.
+  </p>
+
+  <h2>Arithmatic and logic instructions</h2>
+
+  <p>
+    These are how the logic instructions function
+  </p>
+
+  <pre><code>add     rd, rs1, rs2    # rd = rs1 + rs2, register to register
+addi    rd, rs1, imm12  # rd = rs1 + imm12, add immediate, number is signed, range is limited to +/- 2k.
+# same for subtract</code></pre>
+
+  <p>
+    The difference between normal add and add immediate is in the opcode, one single bit is different, differentiating them.
+  </p>
+
+  <p>
+    Here is the list of all Arithmatic and Logic instructions:
+  </p>
+
+  <pre><code>add     rd,rs1,rs2  # rd = rs1 + rs2
+sub     rd,rs1,rs2  # rd = rs1 - rs2
+and     rd,rs1,rs2  # rd = rs1 &amp; rs2
+or      rd,rs1,rs2  # rd = rs1 | rs2
+xor     rd,rs1,rs2  # rd = rs1 ^ rs2
+sll     rd,rs1,rs2  # rd = rs1 &lt;&lt; rs2
+srl     rd,rs1,rs2  # rd = rs1 &gt;&gt; rs2
+sra     rd,rs1,rs2  # rd = rs1 &gt;&gt;&gt; rs2
+slt     rd,rs1,rs2  # rd = (rs1 &lt; rs2) ? 1 : 0
+sltu    rd,rs1,rs2  # rd = (rs1 &lt;u rs2) ? 1 : 0</code></pre>
+
+  <ul>
+
+    <li>sll is shift left logical, srl is shift right logical, put zeros in the vacated bits.</li>
+
+    <li>sra is shift right arithmatic, where signed bit is extended instead of zeros.</li>
+
+    <li>slt is <em>set less than</em>, sets rd to be 1 or zero if rs1 less than rs2. sltu is same but for unsigned.</li>
+
+  </ul>
+
+  <p>
+    It's the same for AL immediate. The second operand is replaced by the imm12 value and the name gets an i at the end, the only difference is that the sub instruction is not available, if you want to subtract just negate the immediate value.
+  </p>
+
+  <h2>Load and store instructions</h2>
+
+  <p>
+    The following are the load instructions:
+  </p>
+
+  <pre><code>lb  rd,imm(rs1)     # rd = mem[rs1+imm12], loads byte       , sign extended
+lh  rd,imm(rs1)     # rd = mem[rs1+imm12], loads halfword   , sign extended
+lw  rd,imm(rs1)     # rd = mem[rs1+imm12], loads word (4 bytes in our case)
+lbu rd,imm(rs1)     # rd = mem[rs1+imm12], loads byte       , unsigned
+lhu rd,imm(rs1)     # rd = mem[rs1+imm12], loads halfword   , unsigned
+sb  rs2, imm12(rs1) # mem(rsi+imm12) = rs2
+sh  rs2, imm12(rs1) # mem(rsi+imm12) = rs2
+sw  rs2, imm12(rs1) # mem(rsi+imm12) = rs2</code></pre>
+
+  <p class="pager"><a href="2026-10-01.html">&larr; Log #5: Learning the RISC V ISA</a> <span class="sep">|</span> <a href="2026-10-03.html">Log #7: alignment requirements and jump/ret instructions &rarr;</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+</body>
+</html>
