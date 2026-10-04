@@ -29,34 +29,56 @@
     day by day in the <a href="log/index.html">build log</a>.
   </p>
 
-  <h3>Framework for CNNs in C</h3>
-  <p class="tag-list"><span class="tag">c</span><span class="tag">neural-networks</span><span class="tag">simd</span></p>
+  <h3>Gesture-Controlled RC Vehicle</h3>
+  <p class="tag-list"><span class="tag">c</span><span class="tag">embedded</span><span class="tag">msp430</span><span class="tag">i2c</span><span class="tag">rf</span></p>
   <p>
-    A framework for building convolutional neural networks from scratch in C,
-    with numpy-style SIMD vectorization. Reaches roughly 96% accuracy on
-    MNIST and 90% on Fashion-MNIST with no dependencies beyond the standard
-    library and a vector intrinsics header.
-  </p>
-  <p><a href="https://github.com/imathrock/CNNs-in-C">github.com/imathrock/CNNs-in-C</a></p>
-
-  <h3>Gesture Control RC Car</h3>
-  <p class="tag-list"><span class="tag">c</span><span class="tag">embedded</span><span class="tag">i2c</span><span class="tag">rf</span></p>
-  <p>
-    Capstone project for UBC PHYS 319. A gesture-controlled RC car built
-    around a custom I2C driver for an MPU6050 accelerometer/gyroscope, with
-    an NRF24 link carrying gesture data to the car in real time.
+    Capstone project for UBC PHYS 319. A gesture-controlled vehicle built
+    on an MSP430 with an MPU6050 IMU (custom I2C driver) and an nRF24L01
+    link carrying gesture data to the car in real time. The firmware
+    interprets motion and runs a signal-filtering pipeline for smooth
+    control.
   </p>
   <p><a href="https://github.com/imathrock/Gesture_Control_RC">github.com/imathrock/Gesture_Control_RC</a></p>
 
-  <h3>LC-3 Virtual Machine</h3>
-  <p class="tag-list"><span class="tag">c</span><span class="tag">systems</span><span class="tag">virtual-machine</span></p>
+  <h3>LC-3 Virtual Machine and Assembler</h3>
+  <p class="tag-list"><span class="tag">c</span><span class="tag">c++</span><span class="tag">systems</span><span class="tag">virtual-machine</span></p>
   <p>
-    A from-scratch virtual machine for the Little Computer 3 (LC-3)
-    instruction set: 10 registers, the full 16-bit instruction set, memory
-    mapping, and I/O handling, with example programs (Hello World, 2048)
-    running on top of it. An LC-3 assembler is in progress.
+    A complete virtual machine for the Little Computer 3 (LC-3) and a
+    two-pass assembler, both written in C. Implements the full instruction
+    set, trap routines, memory-mapped I/O, and precise symbol resolution
+    with a static listing table. Example programs (Hello World, 2048) run
+    on the VM, and the assembler was tested by compiling many different
+    LC-3 programs.
   </p>
   <p><a href="https://github.com/imathrock/LC3-VM">github.com/imathrock/LC3-VM</a></p>
+
+  <h3>Sphericat: Quantum Mechanics Solver</h3>
+  <p class="tag-list"><span class="tag">c++</span><span class="tag">opengl</span><span class="tag">fortran</span><span class="tag">numerical-methods</span></p>
+  <p>
+    A multi-dimensional Schr&ouml;dinger equation solver in object-oriented
+    C++, using finite-difference and Crank-Nicolson methods to simulate
+    quantum mechanical systems. Memory footprint for large sparse
+    Hamiltonians is kept down with optimized GEMM libraries and
+    Arnoldi/Lanczos eigenvalue algorithms.
+  </p>
+
+  <h3>High-Performance CNN Framework</h3>
+  <p class="tag-list"><span class="tag">c</span><span class="tag">avx</span><span class="tag">pthreads</span><span class="tag">neural-networks</span></p>
+  <p>
+    A zero-dependency convolutional neural network framework in C.
+    AVX (SIMD) vectorization, pthreads, and cache-aware memory handling
+    speed up the matrix operations by about 8x. Reaches roughly 96%
+    accuracy on MNIST and 90% on Fashion-MNIST.
+  </p>
+  <p><a href="https://github.com/imathrock/CNNs-in-C">github.com/imathrock/CNNs-in-C</a></p>
+
+  <h3>Instrument Control Library</h3>
+  <p class="tag-list"><span class="tag">python</span><span class="tag">gpib</span><span class="tag">rs232</span><span class="tag">daq</span></p>
+  <p>
+    A Python control library over RS232/GPIB that automates lock-in
+    amplifiers, oscilloscopes, and DMMs. Strict DAQ timing protocols
+    reduced measurement uncertainty by 80% in High-Tc experiments.
+  </p>
 
   <h3>FPGA Emulator <small>(incomplete)</small></h3>
   <p class="tag-list"><span class="tag">c</span><span class="tag">fpga</span><span class="tag">digital-logic</span></p>
