@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A stopwatch on FPGA &mdash; Atharv Bhalerao</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <p class="site-title"><a href="../index.html">Atharv Bhalerao</a></p>
+  <p class="site-tagline">physics &middot; embedded systems &middot; machine learning</p>
+  <nav class="site-nav">
+    <a href="../index.html">Home</a><span class="sep">|</span><a href="../experience.html">Experience</a><span class="sep">|</span><a href="../projects.html">Projects</a><span class="sep">|</span><a href="../log/index.html" aria-current="page">Build Log</a><span class="sep">|</span><a href="../blog/index.html">Blog</a>
+  </nav>
+</header>
+
+<main class="page">
+  <p><a href="index.html">&larr; back to build log</a></p>
+
+  <h1>A stopwatch on FPGA</h1>
+  <p class="byline">2026-10-13 &middot; Log #11 &middot; <span class="tag-list"><span class="tag">Verilog</span></span> &middot; <img class="view-badge" src="https://visitor-badge.laobi.icu/badge?page_id=imathrock.log.2026-10-13" alt="view count"></p>
+
+  <p>
+    Today I decided let's do something on the FPGA. So to begin with I started by making a simple counter. I did not take a video of the counter but it was that according to the clock it would count till 1024 in binary using the leds above the switches. Then I made one small change and now instead of the clock it was running on a push button.
+  </p>
+
+  <p>
+    I then realized that I need to be able to reset this, so I added a reset wire and hooked it up. It was based on a simple if condition in an always block. It only triggerred with I held it down and clocked manually, which means I implemented a synchronus reset. To implement the async reset I put another clause in the always block where the counter would reset based on the negative edge of the reset and voila it reset when reset was clicked regardless of what clock was doing.
+  </p>
+
+  <p>
+    I then went on to attempt the 7 segment display. To translate from binary to hex I needed to write a new module that took a wire array as input and it then outputs the necessary numbers. I then created a binary coded decimal counter and I got the 7 segment display working, it counted till 0xF. I then extended it to another display. I then saw that both the counters were incrementing simultaneously. I then realized that I needed to link 2 different bcds together such that the second would count every 10 counts of the first. I used an enable input and a carry output. The enable for the first case is set to 1 always and for the subsequent counters it's enabled once the number reaches max. The carry of the current counter is the enable for the next. I then hooked these up to a clock and slowed the clock down to 10ths if a millisecond and I had a working stopwatch.
+  </p>
+
+  <p>
+    To add the stop reset functionality I added a simple latch that stopped and started the counter's enable based on the latch's state.
+  </p>
+
+  <figure>
+    <video src="img/FPGAstopwatch.mp4" controls width="100%"></video>
+
+    <figcaption>A working stopwatch</figcaption>
+
+  </figure>
+
+  <p>
+    The code's been uploaded to git.
+  </p>
+
+  <p class="pager"><a href="2026-10-12.html">&larr; Log #10: Simple counter and a stopwatch.</a></p>
+
+</main>
+
+<footer class="site-footer">
+  <p>&copy; 2026 Atharv Bhalerao.</p>
+</footer>
+
+</body>
+</html>
